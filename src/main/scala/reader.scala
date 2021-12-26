@@ -34,26 +34,27 @@ object Main extends App {
 
   val enProgram: Reader[HasReadLn with HasWrite, Unit] =
     for {
-      _    <- write("What's your name? ")
+      _ <- write("What's your name? ")
       name <- readLn()
-      _    <- write(s"Hello, ${name}!\n")
+      _ <- write(s"Hello, ${name}!\n")
     } yield ()
 
   val esProgram: Reader[HasReadLn with HasWrite, Unit] =
     for {
-      _    <- write("¿Cómo te llamas? ")
+      _ <- write("¿Cómo te llamas? ")
       name <- readLn()
-      _    <- write(s"¡Hola, ${name}!\n")
+      _ <- write(s"¡Hola, ${name}!\n")
     } yield ()
 
   val program: Reader[HasEnv with HasReadLn with HasWrite, Unit] =
     for {
       lang <- readEnv[HasEnv with HasReadLn with HasWrite]("LANG")
-      _    <- if (lang.startsWith("es")) {
-                esProgram
-              } else {
-                enProgram
-              }
+      _ <-
+        if (lang.startsWith("es")) {
+          esProgram
+        } else {
+          enProgram
+        }
     } yield ()
 
   program.run {
@@ -78,7 +79,7 @@ object ZIO extends App {
       }
     }
 
-    trait HasReadLn {
+  trait HasReadLn {
     def readLn(): String
   }
 
@@ -102,26 +103,28 @@ object ZIO extends App {
 
   val enProgram: zio.ZIO[HasReadLn with HasWrite, Throwable, Unit] =
     for {
-      _    <- write("What's your name? ")
+      _ <- write("What's your name? ")
       name <- readLn
-      _    <- write(s"Hello, ${name}!\n")
+      _ <- write(s"Hello, ${name}!\n")
     } yield ()
 
   val esProgram: zio.ZIO[HasReadLn with HasWrite, Throwable, Unit] =
     for {
-      _    <- write("¿Cómo te llamas? ")
+      _ <- write("¿Cómo te llamas? ")
       name <- readLn
-      _    <- write(s"¡Hola, ${name}!\n")
+      _ <- write(s"¡Hola, ${name}!\n")
     } yield ()
 
-  val program: zio.ZIO[HasEnv with HasReadLn with HasWrite, Throwable, Unit] =
+  val program
+      : zio.ZIO[HasEnv with HasReadLn with HasWrite, Throwable, Unit] =
     for {
       lang <- readEnv("LANG")
-      _    <- if (lang.startsWith("es")) {
-                esProgram
-              } else {
-                enProgram
-              }
+      _ <-
+        if (lang.startsWith("es")) {
+          esProgram
+        } else {
+          enProgram
+        }
     } yield ()
 
   zio.Runtime.default.unsafeRun {
@@ -130,13 +133,11 @@ object ZIO extends App {
         new HasEnv {
           override val env: Map[String, String] = sys.env
         }
-      } ++
-      zio.ZLayer.succeed {
+      } ++ zio.ZLayer.succeed {
         new HasReadLn {
           override def readLn(): String = scala.io.StdIn.readLine()
         }
-      } ++
-      zio.ZLayer.succeed {
+      } ++ zio.ZLayer.succeed {
         new HasWrite {
           override def write(output: String): Unit = print(output)
         }
