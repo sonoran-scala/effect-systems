@@ -15,5 +15,5 @@ addCompilerPlugin(
   "org.typelevel" %% "kind-projector" % "0.13.0" cross CrossVersion.full
 )
 
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.3.0"
+libraryDependencies += "org.typelevel" %% "cats-core" % "2.7.0"
 libraryDependencies += "dev.zio" %% "zio" % "2.0.0-RC1"
