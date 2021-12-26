@@ -5,7 +5,8 @@ object Main extends App {
   trait Monad[M[_]] {
     def pure[A](x: A): M[A]
     def flatMap[A, B](x: M[A])(f: A => M[B]): M[B]
-    def map[A, B](x: M[A])(f: A => B): M[B] = flatMap(x)(a => pure(f(a)))
+    def map[A, B](x: M[A])(f: A => B): M[B] =
+      flatMap(x)(a => pure(f(a)))
   }
 
   implicit class MonadOps[M[_]: Monad, A](ma: M[A]) {
@@ -99,9 +100,13 @@ object Main extends App {
 
   def readEnv(name: String): Program[String] =
     new WriteT[ReadEnvT[ReadLnT[ID[*], *], *], String] {
-      def runOut(write: String => Unit): ReadEnvT[ReadLnT[ID[*], *], String] = {
+      def runOut(
+          write: String => Unit
+      ): ReadEnvT[ReadLnT[ID[*], *], String] = {
         new ReadEnvT[ReadLnT[ID[*], *], String] {
-          override def runEnv(env: Map[String, String]): ReadLnT[ID, String] =
+          override def runEnv(
+              env: Map[String, String]
+          ): ReadLnT[ID, String] =
             new ReadLnT[ID, String] {
               override def runIn(readLn: () => String): String = {
                 env(name)
@@ -113,9 +118,13 @@ object Main extends App {
 
   def readLn(): Program[String] =
     new WriteT[ReadEnvT[ReadLnT[ID[*], *], *], String] {
-      def runOut(write: String => Unit): ReadEnvT[ReadLnT[ID[*], *], String] = {
+      def runOut(
+          write: String => Unit
+      ): ReadEnvT[ReadLnT[ID[*], *], String] = {
         new ReadEnvT[ReadLnT[ID[*], *], String] {
-          override def runEnv(env: Map[String, String]): ReadLnT[ID, String] =
+          override def runEnv(
+              env: Map[String, String]
+          ): ReadLnT[ID, String] =
             new ReadLnT[ID, String] {
               override def runIn(readLn: () => String): String = {
                 readLn()
@@ -127,9 +136,13 @@ object Main extends App {
 
   def write(output: String): Program[Unit] =
     new WriteT[ReadEnvT[ReadLnT[ID[*], *], *], Unit] {
-      def runOut(write: String => Unit): ReadEnvT[ReadLnT[ID[*], *], Unit] = {
+      def runOut(
+          write: String => Unit
+      ): ReadEnvT[ReadLnT[ID[*], *], Unit] = {
         new ReadEnvT[ReadLnT[ID[*], *], Unit] {
-          override def runEnv(env: Map[String, String]): ReadLnT[ID, Unit] =
+          override def runEnv(
+              env: Map[String, String]
+          ): ReadLnT[ID, Unit] =
             new ReadLnT[ID, Unit] {
               override def runIn(readLn: () => String): Unit = {
                 write(output)

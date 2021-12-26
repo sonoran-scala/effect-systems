@@ -4,7 +4,8 @@ object Main extends App {
 
   trait Monad[M[_]] {
     def pure[A](x: A): M[A]
-    def map[A, B](x: M[A])(f: A => B): M[B] = flatMap(x)(a => pure(f(a)))
+    def map[A, B](x: M[A])(f: A => B): M[B] =
+      flatMap(x)(a => pure(f(a)))
     def flatMap[A, B](x: M[A])(f: A => M[B]): M[B]
   }
 
