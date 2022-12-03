@@ -1,4 +1,4 @@
-scalaVersion := "2.13.9"
+scalaVersion := "2.13.10"
 
 scalacOptions ++=
   Seq(
@@ -16,4 +16,4 @@ addCompilerPlugin(
 )
 
 libraryDependencies += "org.typelevel" %% "cats-core" % "2.9.0"
-libraryDependencies += "dev.zio" %% "zio" % "2.0.2"
+libraryDependencies += "dev.zio" %% "zio" % "2.0.4"
