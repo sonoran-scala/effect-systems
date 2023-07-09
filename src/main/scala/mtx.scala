@@ -23,7 +23,7 @@ object Main extends App {
       override def flatMap[A, B](x: ID[A])(f: A => ID[B]): ID[B] = f(x)
     }
 
-  abstract class ReadEnvT[F[_]: Monad, A] {
+  abstract class ReadEnvT[F[_], A] {
     def runEnv(env: Map[String, String]): F[A]
   }
 
@@ -47,7 +47,7 @@ object Main extends App {
         }
     }
 
-  abstract class ReadLnT[F[_]: Monad, A] {
+  abstract class ReadLnT[F[_], A] {
     def runIn(readLn: () => String): F[A]
   }
 
@@ -71,7 +71,7 @@ object Main extends App {
         }
     }
 
-  abstract class WriteT[F[_]: Monad, A] {
+  abstract class WriteT[F[_], A] {
     def runOut(write: String => Unit): F[A]
   }
 

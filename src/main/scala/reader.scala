@@ -127,26 +127,28 @@ object ZIO extends App {
         }
     } yield ()
 
-  zio.Unsafe.unsafe { implicit u: zio.Unsafe =>
-    for {
-      runtime <- zio.ZIO.runtime[Any]
-      _ <- runtime.unsafe.run {
-        program.provideLayer {
-          zio.ZLayer.succeed {
-            new HasEnv {
-              override val env: Map[String, String] = sys.env
-            }
-          } ++ zio.ZLayer.succeed {
-            new HasReadLn {
-              override def readLn(): String = scala.io.StdIn.readLine()
-            }
-          } ++ zio.ZLayer.succeed {
-            new HasWrite {
-              override def write(output: String): Unit = print(output)
+  val result: zio.ZIO[Any, Throwable, Unit] =
+    zio.Unsafe.unsafe { implicit u: zio.Unsafe =>
+      for {
+        runtime <- zio.ZIO.runtime[Any]
+        _ <- runtime.unsafe.run {
+          program.provideLayer {
+            zio.ZLayer.succeed {
+              new HasEnv {
+                override val env: Map[String, String] = sys.env
+              }
+            } ++ zio.ZLayer.succeed {
+              new HasReadLn {
+                override def readLn(): String =
+                  scala.io.StdIn.readLine()
+              }
+            } ++ zio.ZLayer.succeed {
+              new HasWrite {
+                override def write(output: String): Unit = print(output)
+              }
             }
           }
         }
-      }
-    } yield ()
-  }
+      } yield ()
+    }
 }

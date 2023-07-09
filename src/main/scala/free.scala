@@ -21,7 +21,7 @@ object Main extends App {
       override def flatMap[A, B](x: ID[A])(f: A => ID[B]): ID[B] = f(x)
     }
 
-  trait Free[F[_], A] {
+  sealed trait Free[F[_], A] {
 
     import Free._
 
@@ -53,7 +53,7 @@ object Main extends App {
     def liftM[F[_], A](fa: F[A]): Free[F, A] = Suspend(fa)
   }
 
-  trait Program[A]
+  sealed trait Program[A]
   case class ReadEnv(name: String) extends Program[String]
   case object ReadLn extends Program[String]
   case class Write(output: String) extends Program[Unit]
