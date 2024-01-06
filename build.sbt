@@ -5,4 +5,4 @@ addCompilerPlugin(
 )
 
 libraryDependencies += "org.typelevel" %% "cats-core" % "2.10.0"
-libraryDependencies += "dev.zio" %% "zio" % "2.0.20"
+libraryDependencies += "dev.zio" %% "zio" % "2.0.21"
