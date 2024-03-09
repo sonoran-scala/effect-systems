@@ -1,4 +1,4 @@
-scalaVersion := "2.13.12"
+scalaVersion := "2.13.13"
 
 addCompilerPlugin(
   "org.typelevel" %% "kind-projector" % "0.13.3" cross CrossVersion.full
